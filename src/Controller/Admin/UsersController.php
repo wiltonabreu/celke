@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 
@@ -102,5 +102,27 @@ class UsersController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function login()
+    {
+        if ($this->request->is('post')) {
+            
+            $user = $this->Auth->identify();
+
+            if($user)
+            {
+                $this->Auth->setUser($user);
+                return $this->redirect($this->Auth->redirectUrl());
+            }else{
+                $this->Flash->danger(__('Usuário ou senha inválidos!'));
+            }
+        }
+    }
+
+    public function logout()
+    {
+        $this->redirect($this->Auth->logout());
+        $this->Flash->success(__('Logout realizado com sucesso!'));
     }
 }
